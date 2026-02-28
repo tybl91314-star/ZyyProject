@@ -1,0 +1,124 @@
+# ============================================
+# API Gateway 配置
+# 端口: 8888
+# 功能: 统一入口、负载均衡、限流、跨域处理
+# ============================================
+
+# 服务端口配置
+server:
+  port: 8888  # 网关对外暴露的端口，所有请求都通过这个端口进入
+
+# Spring 应用配置
+spring:
+  # 应用名称（用于服务注册）
+  application:
+    name: api-gateway
+
+  # Redis 配置（用于限流功能）
+  redis:
+    host: localhost      # Redis服务器地址
+    port: 6379          # Redis端口
+    password:           # Redis密码（如果没有设置密码，留空）
+    database: 0         # Redis数据库编号
+    lettuce:
+      pool:
+        max-active: 8   # 连接池最大连接数
+        max-wait: -1ms  # 连接池最大阻塞等待时间（-1表示无限等待）
+        max-idle: 8     # 连接池中的最大空闲连接
+        min-idle: 0     # 连接池中的最小空闲连接
+    timeout: 3000ms     # 连接超时时间
+
+  # Spring Cloud 配置
+  cloud:
+    # ============================================
+    # Nacos 配置
+    # 注意：这里只启用服务发现，禁用配置中心
+    # ============================================
+    nacos:
+      # 服务发现配置
+      discovery:
+        server-addr: localhost:8848  # Nacos服务器地址
+        namespace: public            # 命名空间
+        group: DEFAULT_GROUP         # 分组
+      # 禁用配置中心功能
+      config:
+        enabled: false               # 完全禁用Nacos配置中心
+
+    # ============================================
+    # Gateway 网关配置
+    # ============================================
+    gateway:
+      # 服务发现自动路由配置
+      discovery:
+        locator:
+          enabled: true              # 启用从注册中心自动创建路由
+          lower-case-service-id: true # 服务名转换为小写
+
+      # 路由定义
+      routes:
+        # 路由1: 用户服务
+        - id: user-service-route
+          uri: lb://user-service     # lb:// 表示负载均衡，会自动从Nacos发现服务实例
+          predicates:                # 断言条件：匹配路径
+            - Path=/user-service/**
+          filters:                   # 过滤器链
+            - StripPrefix=1          # 去掉路径前缀的第一段（/user-service）
+            - name: RequestRateLimiter
+              args:
+                key-resolver: "#{@ipKeyResolver}"  # 引用配置类中定义的KeyResolver
+                redis-rate-limiter.replenishRate: 10   # 每秒允许的请求数
+                redis-rate-limiter.burstCapacity: 20   # 最大突发请求数
+
+        # 路由2: 订单服务
+        - id: order-service-route
+          uri: lb://order-service
+          predicates:
+            - Path=/order-service/**
+          filters:
+            - StripPrefix=1
+
+        # 路由3: 商品服务
+        - id: product-service-route
+          uri: lb://product-service
+          predicates:
+            - Path=/product-service/**
+          filters:
+            - StripPrefix=1
+
+      # 全局默认过滤器（对所有路由生效）
+      default-filters:
+        - AddRequestHeader=X-Gateway-Request, api-gateway  # 添加标识
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials  # 去重跨域响应头
+
+      # 全局跨域配置（修正了图片中的语法错误）
+      # 注意：Spring Cloud Gateway 2021.x+ 版本的跨域配置语法
+      globalcors:
+        cors-configurations:
+          '[/**]':  # 注意：这里必须是单引号包裹的字符串
+            allowed-origin-patterns: "*"  # 使用新的模式匹配  # 允许所有来源
+            allowed-methods:  # 允许的HTTP方法
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowed-headers: "*"  # 允许所有请求头
+            allow-credentials: true  # 允许携带凭证（如Cookie）
+            max-age: 3600  # 预检请求缓存时间（秒）
+
+# ============================================
+# 负载均衡配置
+# ============================================
+loadbalancer:
+  nacos:
+    enabled: true  # 启用Nacos负载均衡
+
+# ============================================
+# 日志配置
+# ============================================
+logging:
+  level:
+    root: INFO
+    org.springframework.cloud.gateway: DEBUG  # 开启Gateway调试日志
+    com.example.gateway: DEBUG               # 开启自定义网关代码调试日志
+    org.springframework.cloud.loadbalancer: DEBUG  # 开启负载均衡调试日志

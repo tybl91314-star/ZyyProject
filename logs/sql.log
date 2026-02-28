@@ -1,0 +1,19 @@
+2025-12-10 16:11:36.055 [SQL] 
+    insert 
+    into
+        orders
+        (created_at, order_number, paid_at, payment_status, receiver_name, receiver_phone, remark, shipping_address, status, total_amount, updated_at, user_id) 
+    values
+        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2025-12-10 16:11:36.061 [SQL] binding parameter [1] as [TIMESTAMP] - [Wed Dec 10 16:11:35 CST 2025]
+2025-12-10 16:11:36.063 [SQL] binding parameter [2] as [VARCHAR] - [ORDER20251210001]
+2025-12-10 16:11:36.063 [SQL] binding parameter [3] as [TIMESTAMP] - [null]
+2025-12-10 16:11:36.064 [SQL] binding parameter [4] as [INTEGER] - [0]
+2025-12-10 16:11:36.065 [SQL] binding parameter [5] as [VARCHAR] - [null]
+2025-12-10 16:11:36.065 [SQL] binding parameter [6] as [VARCHAR] - [null]
+2025-12-10 16:11:36.065 [SQL] binding parameter [7] as [VARCHAR] - [null]
+2025-12-10 16:11:36.065 [SQL] binding parameter [8] as [VARCHAR] - [null]
+2025-12-10 16:11:36.065 [SQL] binding parameter [9] as [INTEGER] - [0]
+2025-12-10 16:11:36.067 [SQL] binding parameter [10] as [NUMERIC] - [28997.00]
+2025-12-10 16:11:36.067 [SQL] binding parameter [11] as [TIMESTAMP] - [Wed Dec 10 16:11:35 CST 2025]
+2025-12-10 16:11:36.068 [SQL] binding parameter [12] as [BIGINT] - [1]

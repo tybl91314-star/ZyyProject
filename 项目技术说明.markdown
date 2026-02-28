@@ -1,0 +1,92 @@
+# ZyyProject 技术说明书
+
+## 项目概述
+ZyyProject 是一个基于微服务架构的企业级应用系统，采用Spring Cloud Alibaba生态体系构建，包含用户服务、订单服务、商品服务等多个业务模块。
+
+## 核心技术栈
+
+### 1. 基础框架
+- **Java版本**: JDK 1.8
+- **构建工具**: Maven 3.x
+- **主框架**: Spring Boot 2.7.18
+- **微服务框架**: Spring Cloud 2021.0.8
+- **微服务治理**: Spring Cloud Alibaba 2021.0.5.0
+
+### 2. 微服务组件
+- **API网关**: Spring Cloud Gateway
+- **服务注册发现**: Nacos Discovery
+- **配置中心**: Nacos Config
+- **负载均衡**: Spring Cloud LoadBalancer
+
+### 3. 数据存储
+- **关系型数据库**: MySQL 8.0
+- **ORM框架**: Spring Data JPA/Hibernate
+- **连接池**: 默认HikariCP
+- **SQL监控**: P6Spy 3.9.1
+- **缓存**: Redis (Lettuce客户端)
+
+### 4. 开发工具
+- **代码简化**: Lombok 1.18.30
+- **工具类库**: Hutool 5.8.26
+- **Excel处理**: Apache POI 5.2.5
+- **JSON处理**: Jackson 2.x
+- **通用工具**: Apache Commons Lang3
+
+### 5. 项目结构
+## 各模块详细说明
+
+### API网关 (api-gateway)
+- 基于Spring Cloud Gateway实现
+- 负责请求路由、负载均衡、安全控制
+- 集成Redis实现限流和缓存功能
+- 通过Nacos进行服务发现
+
+### 公共模块 (common)
+- 提供全局工具类和公共组件
+- 包含DTO、枚举、异常处理等基础类
+- 集成Redis、Hutool、POI等通用工具
+- 供其他服务模块引用
+
+### 用户服务 (user-service)
+- 端口: 8081
+- 数据库: user_db
+- Redis数据库: 1
+- 功能: 用户管理、认证授权等
+
+### 其他服务
+- **订单服务**: 处理订单相关业务逻辑
+- **商品服务**: 管理商品信息和库存
+- **服务注册中心**: Nacos (localhost:8848)
+
+## 配置说明
+
+### 环境要求
+- JDK 1.8+
+- MySQL 5.7+/8.0+
+- Redis 5.0+
+- Nacos Server 2.x
+
+### 主要配置项
+- **服务端口**: 各服务使用不同端口(如user-service: 8081)
+- **数据库连接**: MySQL连接配置
+- **Redis配置**: 缓存和会话存储
+- **Nacos地址**: 服务注册发现配置
+
+## 部署架构
+1. 启动Nacos服务注册中心
+2. 启动Redis缓存服务
+3. 启动MySQL数据库
+4. 依次启动各业务服务
+5. 最后启动API网关
+
+## 开发规范
+- 遵循Spring Boot标准开发模式
+- 使用Lombok简化实体类开发
+- 统一异常处理和响应格式
+- 基于JPA的数据访问层设计
+- 通过Nacos实现配置和服务管理
+
+## 版本兼容性
+- 所有组件版本经过严格测试确保兼容性
+- Spring Boot 2.7.x 与 JDK 1.8 完美适配
+- Spring Cloud Alibaba 与对应版本精确匹配

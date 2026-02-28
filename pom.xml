@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.example</groupId>
+    <artifactId>ZyyProject</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <!-- 关键1：设置为pom打包 -->
+    <packaging>pom</packaging>
+
+    <!-- 关键2：定义子模块（先定义空的，后续逐步创建） -->
+    <modules>
+        <module>common</module>
+        <module>api-gateway</module>
+        <module>user-service</module>
+        <module>order-service</module>
+        <module>product-service</module>
+    </modules>
+
+    <!-- 关键3：根据JDK1.8调整版本 -->
+    <properties>
+        <java.version>1.8</java.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- JDK1.8兼容的版本 -->
+        <spring-boot.version>2.7.18</spring-boot.version>  <!-- Spring Boot 2.x 支持JDK1.8 -->
+        <spring-cloud.version>2021.0.8</spring-cloud.version>  <!-- 对应Spring Boot 2.7.x -->
+        <spring-cloud-alibaba.version>2021.0.5.0</spring-cloud-alibaba.version>  <!-- 对应版本 -->
+
+        <!-- Redis 相关版本 -->
+        <redis.lettuce.version>6.2.6.RELEASE</redis.lettuce.version>
+        <redis.jedis.version>4.4.0</redis.jedis.version>
+
+        <!-- Hutool 版本管理 -->
+        <hutool.version>5.8.26</hutool.version>
+        <poi.version>5.2.5</poi.version>
+
+        <lombok.version>1.18.30</lombok.version>
+<!--        <jackson.version>2.13.5</jackson.version>-->
+
+        <!-- 数据库相关版本 -->
+        <mysql-connector.version>8.0.33</mysql-connector.version>
+        <p6spy.version>3.9.1</p6spy.version>
+
+    </properties>
+
+    <!-- 关键4：依赖管理 -->
+    <dependencyManagement>
+        <dependencies>
+            <!-- Spring Boot -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- Spring Cloud -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- Spring Cloud Alibaba -->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${spring-cloud-alibaba.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+
+            <!-- Lombok 简化代码, 只保留Lombok（因为Spring Boot BOM不包含Lombok） -->
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+                <optional>true</optional>
+            </dependency>
+
+            <!-- Hutool 依赖管理 -->
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool.version}</version>
+            </dependency>
+
+            <!-- POI 依赖管理（可选） -->
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+
+            <!-- MySQL 驱动版本管理 -->
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql-connector.version}</version>
+            </dependency>
+
+            <!-- P6Spy SQL监控工具版本管理 -->
+            <dependency>
+                <groupId>p6spy</groupId>
+                <artifactId>p6spy</artifactId>
+                <version>${p6spy.version}</version>
+            </dependency>
+
+        </dependencies>
+
+    </dependencyManagement>
+
+
+</project>
