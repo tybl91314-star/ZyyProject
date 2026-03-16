@@ -7,7 +7,7 @@
     <!-- 继承父项目 -->
     <parent>
         <groupId>com.example</groupId>
-        <artifactId>ZyyProject</artifactId>
+        <artifactId>zyy-project</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 

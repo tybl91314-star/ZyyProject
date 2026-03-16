@@ -6,7 +6,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.example</groupId>
-    <artifactId>ZyyProject</artifactId>
+    <artifactId>zyy-project</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <!-- 关键1：设置为pom打包 -->
